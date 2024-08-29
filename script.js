@@ -146,7 +146,6 @@ class HomePage {
 
 		this.container.appendChild(gridDiv);
 	}
-
 	static addToCart(product) {
 		let cart = JSON.parse(localStorage.getItem('cart')) || {};
 
