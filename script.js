@@ -1,108 +1,112 @@
 "use strict";
 
 class App {
-  static async run() {
-    // Show loader while fetching products
-    Loader.show();
+	static async run() {
+		Loader.show(); // Show loader while fetching products  : By Ahmed
+		const products = await APIService.fetchProducts();
+		Loader.hide(); // Hide loader once products are fetched : By Ahmed
 
-    const products = await APIService.fetchProducts();
-
-    // Hide loader once products are fetched
-    Loader.hide();
-
-    HomePage.renderProducts(products);
-  }
+		HomePage.renderProducts(products);
+	}
 }
 
+/* Created By Ahmed ------------*/
 class Loader {
-  static container = document.querySelector("body");
+	static container = document.querySelector("body");
 
-  static show() {
-    const loaderDiv = document.createElement("div");
-    loaderDiv.id = "loader";
-    loaderDiv.classList.add(
-      "fixed", "inset-0", "flex", "items-center", "justify-center", "bg-white", "z-50"
-    );
-    loaderDiv.innerHTML = `
+	static show() {
+		const loaderDiv = document.createElement("div");
+		loaderDiv.id = "loader";
+		loaderDiv.classList.add(
+			"fixed",
+			"inset-0",
+			"flex",
+			"items-center",
+			"justify-center",
+			"bg-white",
+			"z-50"
+		);
+		loaderDiv.innerHTML = `
       <svg class="animate-spin h-20 w-20 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l1.412-1.411A5.985 5.985 0 016 12H2c0 1.788.676 3.427 1.792 4.708l1.206 1.206z"></path>
       </svg>
     `;
-    this.container.appendChild(loaderDiv);
-  }
+		this.container.appendChild(loaderDiv);
+	}
 
-  static hide() {
-    const loaderDiv = document.getElementById("loader");
-    if (loaderDiv) {
-      loaderDiv.remove();
-    }
-  }
+	static hide() {
+		const loaderDiv = document.getElementById("loader");
+		if (loaderDiv) {
+			loaderDiv.remove();
+		}
+	}
 }
 
 class APIService {
-  static STORE_BASE_URL = "https://fakestoreapi.com";
-  static async fetchProducts() {
-    const url = APIService._constructUrl("products");
-    const res = await fetch(url);
-    const data = await res.json();
-    return data.map((product) => new Product(product));
-  }
-  static async fetchProduct(productId) {
-    const url = APIService._constructUrl(`products/${productId}`);
-    const res = await fetch(url);
-    const data = await res.json();
-    return new Product(data);
-  }
-  static _constructUrl(path) {
-    return `${APIService.STORE_BASE_URL}/${path}`;
-  }
+	static STORE_BASE_URL = "https://fakestoreapi.com";
+	static async fetchProducts() {
+		const url = APIService._constructUrl("products");
+		const res = await fetch(url);
+		const data = await res.json();
+		return data.map((product) => new Product(product));
+	}
+	static async fetchProduct(productId) {
+		const url = APIService._constructUrl(`products/${productId}`);
+		const res = await fetch(url);
+		const data = await res.json();
+		return new Product(data);
+	}
+	static _constructUrl(path) {
+		return `${APIService.STORE_BASE_URL}/${path}`;
+	}
 }
 
+/* --Modified By Ahmed ------------*/
 class HomePage {
-  static container = document.querySelector("body");
+	static container = document.querySelector("body");
 
-  static renderProducts(products) {
-    this.container.classList.add("bg-gray-100", "p-6");
+	static renderProducts(products) {
+		this.container.classList.add("bg-gray-100", "p-6");
 
-    const gridDiv = document.createElement("div");
+		const gridDiv = document.createElement("div");
 
-    gridDiv.classList.add(
-      "container",
-      "mx-auto",
-      "px-4",
-      "grid",
-      "grid-cols-1",
-      "sm:grid-cols-2",
-      "md:grid-cols-3",
-      "lg:grid-cols-3",
-      "gap-6",
-      "mt-5"
-    );
+		gridDiv.classList.add(
+			"container",
+			"mx-auto",
+			"px-4",
+			"grid",
+			"grid-cols-1",
+			"sm:grid-cols-2",
+			"md:grid-cols-3",
+			"lg:grid-cols-3",
+			"gap-6",
+			"mt-5"
+		);
 
-    products.forEach((product) => {
-      const productDiv = document.createElement("div");
+		products.forEach((product) => {
+			const productDiv = document.createElement("div");
 
-      productDiv.classList.add(
-        "bg-gradient-to-br",
-        "from-blue-50",
-        "to-blue-100",
-        "border-2",
-        "border-blue-200",
-        "rounded-xl",
-        "shadow-lg",
-        "overflow-hidden",
-        "transition-all",
-        "duration-400",
-        "hover:shadow-2xl",
-        "hover:scale-105",
-        "flex",
-        "flex-col",
-        "justify-between",
-        "h-full"
-      );
+			productDiv.classList.add(
+				"bg-gradient-to-br",
+				"from-blue-50",
+				"to-blue-100",
+				"border-2",
+				"border-blue-200",
+				"rounded-xl",
+				"shadow-lg",
+				"overflow-hidden",
+				"transition-all",
+				"duration-400",
+				"hover:shadow-2xl",
+				"hover:scale-105",
+				"flex",
+				"flex-col",
+				"justify-between",
+				"h-full"
+			);
 
-      productDiv.innerHTML = `
+			productDiv.innerHTML = `
         <div class="grid grid-cols-1 gap-4 h-full">
           <div class="relative p-4 rounded-lg bg-gradient-to-b from-gray-100 to-gray-200">
             <img 
@@ -127,44 +131,45 @@ class HomePage {
         </div>
       `;
 
-      productDiv.addEventListener("click", () => {
-        Products.run(product);
-      });
-      gridDiv.appendChild(productDiv);
-    });
+			productDiv.addEventListener("click", () => {
+				Products.run(product);
+			});
+			gridDiv.appendChild(productDiv);
+		});
 
-    this.container.appendChild(gridDiv);
-  }
+		this.container.appendChild(gridDiv);
+	}
 }
 
 class Products {
-  static async run(product) {
-    const productDetails = await APIService.fetchProduct(product.id);
-    ProductPage.renderProduct(productDetails);
-  }
+	static async run(product) {
+		const productDetails = await APIService.fetchProduct(product.id);
+		ProductPage.renderProduct(productDetails);
+	}
 }
 
 class ProductPage {
-  static container = document.querySelector("body");
-  static renderProduct(product) {
-    ProductPage.container.innerHTML = `
+	static container = document.querySelector("body");
+	static renderProduct(product) {
+		ProductPage.container.innerHTML = `
       <div>
         ${product.title}
       </div>`;
-  }
+	}
 }
 
+/*--- Modified by Ahmed  to add price, category, rating count ---*/
 class Product {
-  constructor(json) {
-    this.id = json.id;
-    this.title = json.title;
-    this.image = json.image;
-    this.price = json.price;
-    this.category = json.category;
-    this.description = json.description;
-    this.rating = json.rating.rate;
-    this.count = json.rating.count;
-  }
+	constructor(json) {
+		this.id = json.id;
+		this.title = json.title;
+		this.image = json.image;
+		this.price = json.price;
+		this.category = json.category;
+		this.description = json.description;
+		this.rating = json.rating.rate;
+		this.count = json.rating.count;
+	}
 }
 
 document.addEventListener("DOMContentLoaded", App.run);
