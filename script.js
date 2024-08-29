@@ -5,7 +5,7 @@ class App {
 		Loader.show(); // Show loader while fetching products  : By Ahmed
 		const products = await APIService.fetchProducts();
 		Loader.hide(); // Hide loader once products are fetched : By Ahmed
-
+		
 		HomePage.renderProducts(products);
 	}
 }
