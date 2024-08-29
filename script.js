@@ -124,7 +124,7 @@ class HomePage {
             <p class="text-2xl font-extrabold text-blue-800 mt-1">$ ${product.price}</p>
           </div>
           <div class="flex items-center justify-center mt-3">
-            <button class="min-w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-semibold py-3 px-4 rounded shadow-md transform transition-transform duration-300 hover:scale-105 hover:from-blue-600 hover:to-blue-700 add-to-cart-btn">
+            <button class="min-w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-semibold py-3 px-4 rounded shadow-md transform transition-transform duration-300 hover:scale-105 hover:from-blue-600 hover:to-blue-700 add-to-cart-btn" data-id="${product.id}">
               Add to Cart
             </button>
           </div>
@@ -134,12 +134,36 @@ class HomePage {
 			productDiv.addEventListener("click", () => {
 				Products.run(product);
 			});
+
+			const addToCartButton = productDiv.querySelector(".add-to-cart-btn");
+			addToCartButton.addEventListener("click", (e) => {
+				e.stopPropagation();  // prevents triggering product details
+				this.addToCart(product);
+			});
+
 			gridDiv.appendChild(productDiv);
 		});
 
 		this.container.appendChild(gridDiv);
 	}
+
+	static addToCart(product) {
+		let cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+		if (cart[product.id]) {
+			cart[product.id].quantity += 1; // Increase quantity if already in cart
+		} else {
+			cart[product.id] = {
+				...product,
+				quantity: 1 // Add new product with quantity 1
+			};
+		}
+
+		localStorage.setItem('cart', JSON.stringify(cart));
+		alert(`${product.title} added to cart!`);
+	}
 }
+
 
 class Products {
 	static async run(product) {
