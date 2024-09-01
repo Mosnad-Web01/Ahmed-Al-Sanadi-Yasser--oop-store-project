@@ -122,7 +122,6 @@ class HomePage {
                 </a>
                 <ul class="hidden md:flex items-center gap-6">
                     <li><a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">Home</a></li>
-                    <li><a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">About</a></li>
                     <li>
                         <select id="category-filter" class="bg-blue-500 dark:bg-blue-600 text-white py-2 px-4 rounded-md focus:outline-none">
                             <option value="all">All Categories</option>
@@ -328,11 +327,11 @@ class HomePage {
         const cartCountElement = document.getElementById("cart-count");
         cartCountElement.textContent = cartCount;
     }
-
     static filterProducts(category) {
         const allProducts = document.querySelectorAll("#product-grid > div");
         allProducts.forEach((productCard) => {
-            const productCategory = productCard.querySelector("p.capitalize").textContent.toLowerCase();
+            // Adjust the selector to match the element holding the category
+            const productCategory = productCard.querySelector("p.text-gray-500").textContent.toLowerCase();
             if (category === "all" || productCategory === category.toLowerCase()) {
                 productCard.classList.remove("hidden");
             } else {
@@ -402,28 +401,63 @@ class ProductPage {
         );
 
         productDetail.innerHTML = `
-            <div class="md:w-1/2 flex justify-center">
-                <img
-                    class="w-full h-auto object-contain"
-                    src="${product.image}"
-                    alt="${product.title}"
-                />
-            </div>
-            <div class="md:w-1/2">
-                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">${product.title}</h1>
-                <p class="text-xl text-gray-600 dark:text-gray-300 mb-4 capitalize">${product.category}</p>
-                <div class="flex items-center mb-4">
-                    <span class="text-yellow-500 text-xl mr-2">★ ${product.rating}</span>
-                    <span class="text-gray-600 dark:text-gray-300">(${product.count} reviews)</span>
+        <div class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg shadow-2xl transform transition-all duration-500 ease-in-out">
+            <!-- Image and Details Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Image Section -->
+                <div class="relative flex justify-center items-center">
+                    <img 
+                        style="max-height: 400px;"
+                        class="object-contain transition-transform duration-300 hover:scale-105"
+                        src="${product.image}" 
+                        alt="${product.title}"
+                    />
+                    <!-- Sale Badge -->
+                
                 </div>
-                <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4">$${product.price}</p>
-                <p class="text-gray-700 dark:text-gray-300 mb-6">${product.description}</p>
-                <button class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-md add-to-cart-btn">
-                    Add to Cart
-                </button>
+                <!-- Details Section -->
+                <div class="flex flex-col justify-between">
+                    <!-- Product Title -->
+                    <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-4 transition-colors duration-300 ease-in-out">
+                        ${product.title}
+                    </h1>
+                    <!-- Product Category -->
+                    <p class="text-lg text-gray-700 dark:text-gray-400 mb-4 capitalize transition-colors duration-300 ease-in-out">
+                        Category: ${product.category}
+                    </p>
+                    <!-- Rating and Reviews -->
+                    <div class="flex items-center mb-4">
+                        <span class="flex items-center text-yellow-500 text-2xl mr-2">★ ${product.rating}</span>
+                        <span class="text-gray-600 dark:text-gray-400 transition-colors duration-300 ease-in-out">
+                            (${product.count} reviews)
+                        </span>
+                    </div>
+                    <!-- Price with Discount -->
+                    <div class="flex items-center mb-4">
+                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400 mr-4 transition-colors duration-300 ease-in-out">
+                            $${product.price}
+                        </p>
+                        <p class="text-lg text-gray-500 line-through dark:text-gray-600 transition-colors duration-300 ease-in-out">
+                            $${(product.price * 1.2).toFixed(2)} 
+                        </p>
+                    </div>
+                    <!-- Product Description -->
+                    <p class="text-base text-gray-700 dark:text-gray-300 mb-6 leading-relaxed transition-colors duration-300 ease-in-out">
+                        ${product.description}
+                    </p>
+                    <!-- Add to Cart and Wishlist Buttons -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="bg-gradient-to-r add-to-cart-btn from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-6 rounded-md shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 ease-in-out transform hover:scale-105">
+                            Add to Cart
+                        </button>
+                        
+                    </div>
+                </div>
             </div>
-        `;
-
+        </div>
+    `;
+    
+    
         // Add to Cart Event
         const addToCartBtn = productDetail.querySelector(".add-to-cart-btn");
         addToCartBtn.addEventListener("click", () => {
@@ -448,6 +482,7 @@ class ProductPage {
     }
 }
 
+
 class Product {
     constructor(json) {
         this.id = json.id;
@@ -464,3 +499,5 @@ class Product {
 document.addEventListener("DOMContentLoaded", () => {
     App.run();
 });
+
+
